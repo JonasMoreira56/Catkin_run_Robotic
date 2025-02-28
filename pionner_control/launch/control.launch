@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="pioneer_control" type="control_node.py" name="pioneer_control" output="screen"/>
+</launch>

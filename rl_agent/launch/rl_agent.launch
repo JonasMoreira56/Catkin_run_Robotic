@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="rl_agent" type="agent_node.py" name="rl_agent" output="screen"/>
+</launch>

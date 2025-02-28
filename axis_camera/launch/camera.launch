@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="axis_camera" type="camera_node.py" name="axis_camera" output="screen"/>
+</launch>
