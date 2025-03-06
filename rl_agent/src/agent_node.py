@@ -7,7 +7,7 @@ from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge
 
-MODEL_PATH = "/home/user/catkin_ws/src/rl_agent/src/models/saved_model.pth"
+MODEL_PATH = "/home/jonas/catkin_ws/src/rl_agent/src/models/saved_model.pth"
 
 class RLAgent:
     def __init__(self):
