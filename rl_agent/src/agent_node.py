@@ -7,17 +7,28 @@ from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge
 
-MODEL_PATH = "/home/user/catkin_ws/src/rl_agent/src/model_weights.pth"
+MODEL_PATH = "/home/user/catkin_ws/src/rl_agent/src/models/saved_model.pth"
 
 class RLAgent:
     def __init__(self):
         rospy.init_node("rl_agent")
         self.bridge = CvBridge()
-        self.model = torch.load(MODEL_PATH, map_location="cpu")
-        self.model.eval()
+        # self.model = torch.load(MODEL_PATH, map_location="cpu")
+        # self.model.eval()
+        
+        # self.sub = rospy.Subscriber("/camera/image_raw", Image, self.image_callback)
+        # self.pub = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
+        
+        try:
+            self.model = torch.load(MODEL_PATH, map_location="cpu")
+            self.model.eval()
+            rospy.loginfo("Modelo carregado com sucesso a partir de %s", MODEL_PATH)
+        except Exception as e:
+            rospy.logerr("Falha ao carregar o modelo: %s", str(e))
         
         self.sub = rospy.Subscriber("/camera/image_raw", Image, self.image_callback)
         self.pub = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
+
 
     def image_callback(self, msg):
         cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
