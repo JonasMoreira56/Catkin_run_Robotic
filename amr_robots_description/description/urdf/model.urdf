@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+
+
+<robot name="pan_tilt_camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/sim_p3at</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo>
+
+
+  <link name="base_cam">
+    <inertial>
+      <mass value="1" />
+      <origin xyz=" 0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.01" radius="0.02"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.01" radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="pantbl_link">
+    <inertial>
+      <mass value="1" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="cam_link">
+    <inertial>
+      <mass value="0.5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+      <material name="ChassisRed">
+        <color rgba="0.851 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="base_cam">
+    <material>Gazebo/Red</material>
+  </gazebo>
+  <gazebo reference="cam_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <joint name="base_to_pantbl" type="revolute">
+    <parent link="base_cam"/>
+    <child link="pantbl_link"/>
+    <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="-1.5" upper="1.5" velocity="0.5"/>
+  </joint>
+
+  <joint name="pantbl_to_cam" type="revolute">
+    <parent link="pantbl_link"/>
+    <child link="cam_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-1.5" upper="1.5" velocity="0.5"/>
+  </joint>
+
+  <gazebo>
+    <plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
+      <commandTopic>/sim_p3at/camera/cmd_vel</commandTopic>
+      <odometryTopic>/sim_p3at/camera/odom</odometryTopic>
+      <odometryFrame>/sim_p3at/camera/odom</odometryFrame>
+      <odometryRate>20.0</odometryRate>
+      <robotBaseFrame>cam_link</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+  <!--Gazebo Camera Plugin-->
+   <gazebo reference="cam_link">
+    <sensor type="camera" name="camera">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>10.0</updateRate>
+        <cameraName>/sim_p3at/camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="libgazebo_ros_p3d.so" name="pose_cam">
+      <alwaysOn>true</alwaysOn>
+         <updateRate>10.0</updateRate>
+         <bodyName>cam_link</bodyName>
+         <topicName>sim_p3at/camera/pose</topicName>
+         <frameName>map</frameName>
+         <xyzOffsets>0 0 0</xyzOffsets> <!-- option to initialize odometry for fake localization-->
+         <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
+  </gazebo>
+
+
+</robot>

@@ -1,0 +1,83 @@
+CREATE TABLE usuario 
+( 
+ cod_usu INT PRIMARY KEY AUTO_INCREMENT,  
+ matricula VARCHAR(8) NOT NULL,  
+ nome VARCHAR(200) NOT NULL,  
+ email VARCHAR(200) NOT NULL,  
+ telefone VARCHAR(11) NOT NULL,  
+ senha VARCHAR(8) NOT NULL,  
+ idtipo INT,  
+ idcurso INT,  
+ cpf VARCHAR(11) NOT NULL
+); 
+
+CREATE TABLE modalidade 
+( 
+ cod_mod INT PRIMARY KEY AUTO_INCREMENT,  
+ descricao VARCHAR(200) NOT NULL
+); 
+
+CREATE TABLE atividade 
+( 
+ cod_ativ INT PRIMARY KEY AUTO_INCREMENT,  
+ descricao VARCHAR(200) NOT NULL,  
+ ch_min INT NOT NULL,  
+ ch_max INT NOT NULL,  
+ doc_prob VARCHAR(200) NOT NULL,  
+ idmodalidade INT,  
+ idppc INT
+); 
+
+CREATE TABLE curso 
+( 
+ cod_curso INT PRIMARY KEY AUTO_INCREMENT,  
+ descricao VARCHAR(200) NOT NULL,  
+ idusuario_coord INT,  
+ idusuario_vice INT
+); 
+
+CREATE TABLE ppc 
+( 
+ cod_ppc INT PRIMARY KEY AUTO_INCREMENT,  
+ ano VARCHAR(4) NOT NULL,  
+ idcurso INT
+); 
+
+CREATE TABLE comissao 
+( 
+ cod_comissao INT PRIMARY KEY AUTO_INCREMENT,  
+ idcurso INT); 
+
+CREATE TABLE tipo 
+( 
+ desc_tipo VARCHAR(200) NOT NULL,  
+ cod_tipo INT PRIMARY KEY AUTO_INCREMENT
+); 
+
+CREATE TABLE aacc 
+( 
+ dt_submissao DATE NOT NULL,  
+ status VARCHAR(200) NOT NULL,  
+ cod_usu INT,  
+ cod_ativ INT,  
+ cod_comissao INT
+); 
+
+CREATE TABLE forma 
+( 
+ cod_usu INT,  
+ cod_comissao INT); 
+
+ALTER TABLE usuario ADD FOREIGN KEY(idtipo) REFERENCES tipo (cod_tipo);
+ALTER TABLE usuario ADD FOREIGN KEY(idcurso) REFERENCES curso (cod_curso);
+ALTER TABLE atividade ADD FOREIGN KEY(idmodalidade) REFERENCES modalidade (cod_mod);
+ALTER TABLE atividade ADD FOREIGN KEY(idppc) REFERENCES ppc (cod_ppc);
+ALTER TABLE curso ADD FOREIGN KEY(idusuario_coord) REFERENCES usuario (cod_usu);
+ALTER TABLE curso ADD FOREIGN KEY(idusuario_vice) REFERENCES usuario (cod_usu);
+ALTER TABLE ppc ADD FOREIGN KEY(idcurso) REFERENCES curso (cod_curso);
+ALTER TABLE comissao ADD FOREIGN KEY(idcurso) REFERENCES curso (cod_curso);
+ALTER TABLE aacc ADD FOREIGN KEY(cod_usu) REFERENCES usuario (cod_usu);
+ALTER TABLE aacc ADD FOREIGN KEY(cod_ativ) REFERENCES atividade (cod_ativ);
+ALTER TABLE aacc ADD FOREIGN KEY(cod_comissao) REFERENCES comissao (cod_comissao);
+ALTER TABLE forma ADD FOREIGN KEY(cod_usu) REFERENCES usuario (cod_usu);
+ALTER TABLE forma ADD FOREIGN KEY(cod_comissao) REFERENCES comissao (cod_comissao);

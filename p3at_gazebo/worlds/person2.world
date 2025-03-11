@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+   <world name="default">
+      <!-- A ground plane -->
+      <include>
+         <uri>model://ground_plane</uri>
+      </include>
+      <!-- A global light source -->
+      <include>
+         <uri>model://sun</uri>
+      </include>
+
+<!-- An actor -->
+      <actor name="animated_box">
+      <skin>
+         <geometry>
+              <box>
+                <size>.2 .2 .2</size>
+              </box>
+            </geometry>
+        <scale>1.0</scale>
+      </skin>
+
+ <plugin name="actor_plugin" filename="libgazebo_ros_actor_plugin.so">
+        <follow_mode>path</follow_mode>
+        <path_topic>/cmd_path</path_topic>
+        
+        <!--follow_mode>velocity</follow_mode-->
+        <!--vel_topic>/cmd_vel</vel_topic-->
+        
+        <animation_factor>4.0</animation_factor>
+        <linear_tolerance>0.1</linear_tolerance>
+        <linear_velocity>0.5</linear_velocity>
+        <angular_tolerance>0.0872</angular_tolerance>
+        <angular_velocity>2.5</angular_velocity>
+        <default_rotation>1.57</default_rotation>
+      </plugin>
+      </actor>
+
+
+   </world>
+</sdf>
