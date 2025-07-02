@@ -16,12 +16,57 @@ Este pacote é responsável por capturar imagens de uma câmera IP e publicá-la
 - **Arquivo de Nó:** [camera_node.py](axis_camera/src/camera_node.py)
 - **Lançamento:** [camera.launch](axis_camera/launch/camera.launch)
 
+### 1. Conectar a Câmera e Configurar o IP
+
+1. **Acesse pela conexão Wi-Fi:**
+   - Conecte seu notebook à rede Wi-Fi da câmera (Master Pionner3 2).
+
+2. **Conecte a câmera Wi-Fi:**
+   - Agora você deve conseguir visualizar o feed da câmera pelo aplicativo no seu notebook, acessando o endereço: `http://192.168.0.20`.
+
+3. **Faça login de acesso à câmera:**
+   - Quando solicitado, insira as credenciais fornecidas:
+     - **Usuário (Username):** `root`
+     - **Senha (Password):** `p3at`
+
 ### pionner_control
 
 Este pacote controla o movimento do robô publicando comandos de velocidade no tópico `/cmd_vel`.
 
 - **Arquivo de Nó:** [control_node.py](pionner_control/src/control_node.py)
 - **Lançamento:** [control.launch](pionner_control/launch/control.launch)
+
+## Guia: Passo a Passo para Configurar o Repetidor
+
+### 1. Prepare seu notebook para configurar o repetidor
+
+1. **Configurações de rede de acesso:**
+   - Conecte seu notebook ao repetidor usando um cabo Ethernet.
+   - Configure manualmente as seguintes informações de rede no seu notebook:
+     - **Endereço IP:** `192.168.0.10` (ou qualquer IP entre `192.168.0.2` e `192.168.0.254`, exceto `192.168.0.1` que é o IP do repetidor)
+     - **Máscara de sub-rede:** `255.255.255.0`
+     - **Gateway:** `192.168.0.1` (IP do repetidor)
+     - **DNS preferencial:** `0.0.0.0`
+   - Clique em "OK" para salvar as alterações.
+
+### 2. Configurar o Repetidor
+
+1. **Conecte o repetidor:**
+   - Mantenha seu notebook conectado ao repetidor usando o cabo Ethernet.
+
+2. **Acesse a página de configuração do repetidor:**
+   - Abra um navegador de internet no seu notebook.
+   - Digite o endereço IP do repetidor na barra de endereços: `192.168.0.1` e pressione Enter.
+
+3. **Faça login no repetidor:**
+   - Quando solicitado, insira as credenciais fornecidas:
+     - **Usuário (Username):** `admin`
+     - **Senha (Password):** `admin`
+   - Clique em "Login" ou "OK".
+
+4. **Siga o assistente de configuração do repetidor:**
+   - Após o login, siga as instruções exibidas na interface de configuração do repetidor para finalizar o processo.
+
 
 ### rl_agent
 
