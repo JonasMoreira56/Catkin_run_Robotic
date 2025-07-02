@@ -2,7 +2,7 @@
 
 Este projeto ROS (Robot Operating System) consiste em três pacotes principais: `axis_camera`, `pionner_control` e `rl_agent`. Cada pacote tem uma funcionalidade específica para controlar um robô, capturar imagens de uma câmera e aplicar um agente de aprendizado por reforço.
 <p align="left">
-  <img src="static/img/fundo.png" alt="Robo" width="150"/>
+  <img src="robo.png" alt="Robo" width="150"/>
 </p>
 
 ## Estrutura do Projeto
